@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithBridge:(RCTBridge *)bridge;
 
 @property (nonatomic, copy, nullable) NSString *text;
+@property (nonatomic, assign) BOOL isControlled;
 @property (nonatomic, copy, nullable) NSString *placeholder;
 @property (nonatomic, assign) NSInteger maximumNumberOfLines;
 @property (nonatomic, copy, nullable) RCTDirectEventBlock onContentSizeChange;

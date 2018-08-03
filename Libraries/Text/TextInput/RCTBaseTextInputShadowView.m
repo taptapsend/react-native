@@ -18,7 +18,6 @@
 @implementation RCTBaseTextInputShadowView
 {
   __weak RCTBridge *_bridge;
-  NSAttributedString *_Nullable _previousAttributedText;
   BOOL _needsUpdateView;
   NSAttributedString *_Nullable _localAttributedText;
   CGSize _previousContentSize;
@@ -110,9 +109,6 @@
 - (void)setText:(NSString *)text
 {
   _text = text;
-  // Clear `_previousAttributedText` to notify the view about the change
-  // when `text` native prop is set.
-  _previousAttributedText = nil;
   [self dirtyLayout];
 }
 
@@ -152,15 +148,6 @@
     [attributedText insertAttributedString:propertyAttributedText atIndex:0];
   }
 
-  BOOL isAttributedTextChanged = NO;
-  if (![_previousAttributedText isEqualToAttributedString:attributedText]) {
-    // We have to follow `set prop` pattern:
-    // If the value has not changed, we must not notify the view about the change,
-    // otherwise we may break local (temporary) state of the text input.
-    isAttributedTextChanged = YES;
-    _previousAttributedText = [attributedText copy];
-  }
-
   NSNumber *tag = self.reactTag;
 
   [_bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
@@ -173,7 +160,11 @@
     baseTextInputView.reactBorderInsets = borderInsets;
     baseTextInputView.reactPaddingInsets = paddingInsets;
 
-    if (isAttributedTextChanged) {
+    // For controlled inputs attempt to update on any changes; an event lag
+    // check in the Libraries/Text/TextInput/RCTBaseTextInputView.m takes care
+    // of cases where the JS-provided value (attributedText.string) lags behind
+    // the one in the native text input.
+    if (self.isControlled && ![attributedText.string isEqualToString:baseTextInputView.attributedText.string]) {
       baseTextInputView.attributedText = attributedText;
     }
   }];
