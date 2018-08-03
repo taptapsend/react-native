@@ -924,6 +924,7 @@ const TextInput = createReactClass({
           onSelectionChange={this._onSelectionChange}
           onSelectionChangeShouldSetResponder={emptyFunction.thatReturnsTrue}
           text={this._getText()}
+          isControlled={typeof this.props.value === 'string'}
         />
       );
     } else {
@@ -958,6 +959,7 @@ const TextInput = createReactClass({
           onTextInput={this._onTextInput}
           onSelectionChangeShouldSetResponder={emptyFunction.thatReturnsTrue}
           text={this._getText()}
+          isControlled={typeof this.props.value === 'string'}
           dataDetectorTypes={this.props.dataDetectorTypes}
           onScroll={this._onScroll}
         />
@@ -1010,6 +1012,7 @@ const TextInput = createReactClass({
         onTextInput={this._onTextInput}
         onSelectionChangeShouldSetResponder={emptyFunction.thatReturnsTrue}
         text={this._getText()}
+        isControlled={typeof this.props.value === 'string'}
         dataDetectorTypes={this.props.dataDetectorTypes}
         onScroll={this._onScroll}
       />
