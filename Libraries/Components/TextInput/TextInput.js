@@ -937,7 +937,6 @@ const TextInput = createReactClass({
     return {
       allowFontScaling: true,
       rejectResponderTermination: true,
-      underlineColorAndroid: 'transparent',
     };
   },
   /**
