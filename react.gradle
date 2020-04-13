@@ -153,6 +153,12 @@ afterEvaluate {
                 }
             }
 
+            // This task requires that the `jsBundleDir` has been populated, but
+            // hadn't declared an explicit dependency on the bundle task. This
+            // was causing the bundleStaging / bundleRelease tasks to fail to
+            // include the JS bundle on CI.
+            dependsOn(currentBundleTask)
+
             // mergeAssets must run first, as it clears the intermediates directory
             dependsOn(variant.mergeAssetsProvider.get())
 
